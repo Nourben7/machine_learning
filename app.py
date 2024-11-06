@@ -29,10 +29,10 @@ import optuna
 @st.cache_data
 def load_data():
     # Modify this path based on your actual data file location
-    df_satisfaction = pd.read_csv("C:\\Users\\nourn\\Desktop\\ML\\train.csv")
+    data = pd.read_csv("C:\\Users\\nourn\\Desktop\\ML\\train.csv")
 
 
-    return df_satisfaction
+    return data
 
 # Sidebar for page navigation
 st.sidebar.title("Navigation")
@@ -80,6 +80,7 @@ if page == "Exploratory Data Analysis (EDA)":
     
     label_encoder = LabelEncoder()
     data['satisfaction'] = label_encoder.fit_transform(data['satisfaction'])
+    
     #from sklearn.preprocessing import LabelEncoder
     numerical_cols = data.select_dtypes(include=['number']).columns
     df_numerical = data[numerical_cols] 
@@ -193,51 +194,69 @@ if page == "Exploratory Data Analysis (EDA)":
     
     
     
-    
+    st.session_state['processed_data'] = data 
     
     
 
 # Page 2: Model and Evaluation
 elif page == "Model and Evaluation":
     st.title("Model Training and Evaluation")
-
-    # Load data
-    data = load_data()
-
-    # Data preparation (modify based on your notebook)
-    # Assuming the last column is the target for demonstration; adjust as needed
-    X = data.iloc[:, :-1]  # Features
-    y = data.iloc[:, -1]   # Target
-
-    # Split the data
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    if 'processed_data' in st.session_state:
+        data = st.session_state['processed_data']
+   
     
-    # Model training (using RandomForest as an example, modify as per your model)
-    model = RandomForestClassifier(random_state=42)
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
+    
+    
+        # Data preparation (modify based on your notebook)
+        # Assuming the last column is the target for demonstration; adjust as needed
+        X = data.drop(columns=['satisfaction']) #'Unnamed: 0','id' 
+        X_numeric = X.select_dtypes(include = ['number'])  # Caractéristiques
+        y = data['satisfaction']   # Cible
 
-    # Display classification report
-    st.write("### Classification Report")
-    report = classification_report(y_test, y_pred, output_dict=True)
-    report_df = pd.DataFrame(report).transpose()
-    st.write(report_df)
+        st.title("Baseline : KNN Classifier")
+        X, y = X_numeric, y
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, test_size=0.2, random_state=42
+        )
 
-    # Display confusion matrix
-    st.write("### Confusion Matrix")
-    cm = confusion_matrix(y_test, y_pred)
-    fig, ax = plt.subplots()
-    sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax)
-    st.pyplot(fig)
+        # Pipeline setup with KNeighborsClassifier
+        pipeline = Pipeline(steps=[('model', KNeighborsClassifier())])
 
-    # Feature importance (for models that support it)
-    if hasattr(model, "feature_importances_"):
-        st.write("### Feature Importances")
-        feature_importances = pd.DataFrame({
-            'feature': X.columns,
-            'importance': model.feature_importances_
-        }).sort_values(by="importance", ascending=False)
+        # Model training
+        pipeline.fit(X_train, y_train)
 
-        st.write(feature_importances)
-
-# Run the app with `streamlit run app.py`
+        # Predictions and evaluation
+        y_pred = pipeline.predict(X_test)
+        accuracy = accuracy_score(y_test, y_pred)
+        
+        st.write(f"Accuracy: {accuracy:.4f}")
+        st.write("Classification Report:")
+        st.text(classification_report(y_test, y_pred))
+        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
