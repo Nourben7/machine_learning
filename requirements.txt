@@ -8,3 +8,4 @@ scikit-learn
 scipy
 optuna
 plotly
+xgboost
