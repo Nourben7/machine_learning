@@ -36,7 +36,9 @@ from scipy.stats import uniform
 
 def load_data():
     # Modify this path based on your actual data file location
-    data = pd.read_csv("C:\\Users\\nourn\\Desktop\\ML\\df_satisfaction.csv")
+    
+    url=https://github.com/Nourben7/machine_learning/blob/main/df_satisfaction.csv
+    data = pd.read_csv(url)
 
 
     return data
