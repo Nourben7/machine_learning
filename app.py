@@ -33,7 +33,7 @@ from scipy.stats import uniform
 
 
 # Define a function for loading data
-@st.cache_data
+
 def load_data():
     # Modify this path based on your actual data file location
     data = pd.read_csv("C:\\Users\\nourn\\Desktop\\ML\\df_satisfaction.csv")
@@ -1025,7 +1025,7 @@ elif st.session_state.page == "Gradient boosting":
     
         data = load_data()
         data= data.dropna()
-        label_encoder = LabelEncoder()
+    
         st.title("Gradient boosting ") 
         
         df_train, df_test = train_test_split(data, test_size=0.2, random_state=42)
