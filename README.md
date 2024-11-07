@@ -1,3 +1,6 @@
+### lien pour l'application :
+https://machinelearning-cj2ffzsebiutlb62zcb3jn.streamlit.app/
+
 ### Prédiction de la Satisfaction des Passagers Aériens
 Contexte et Objectif
 Objectif : Prédire la satisfaction des passagers aériens.
