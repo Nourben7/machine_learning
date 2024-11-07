@@ -1,7 +1,7 @@
 ### lien vers l'API application :
 https://machinelearning-cj2ffzsebiutlb62zcb3jn.streamlit.app/
 
-ps: certaines pages de l'application prend du temps pour charger
+ps: certaines pages de l'application prennent du temps pour charger
 ### Prédiction de la Satisfaction des Passagers Aériens
 Contexte et Objectif
 Objectif : Prédire la satisfaction des passagers aériens.
