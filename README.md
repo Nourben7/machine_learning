@@ -2,77 +2,113 @@
 https://machinelearning-cj2ffzsebiutlb62zcb3jn.streamlit.app/
 
 ps: certaines pages de l'application prennent du temps pour charger
-### Prédiction de la Satisfaction des Passagers Aériens
-Contexte et Objectif
-Objectif : Prédire la satisfaction des passagers aériens.
 
-### Enjeux
-1. Identifier les facteurs de satisfaction
-But : Identifier les variables qui influencent la satisfaction (ponctualité, confort, service, etc.).
-Impact : Prioriser les actions pour améliorer l'expérience client.
+# Prédiction de la Satisfaction des Passagers Aériens
 
-2. Prédire la mécontentement
-But : Identifier les passagers susceptibles d’être insatisfaits.
-Impact : Permettre des actions correctives pour réduire les avis négatifs et fidéliser les clients.
+## Contexte et Objectif
 
-3. Segmenter les passagers selon leur satisfaction
-But : Regrouper les passagers selon leurs attentes.
-Impact : Offrir des services personnalisés et optimiser l'expérience par segment.
+### Objectif
+L'objectif principal de ce projet est de prédire la satisfaction des passagers aériens en se basant sur leurs caractéristiques démographiques et leurs évaluations des services en vol. L'analyse vise à fournir des insights exploitables pour améliorer l'expérience client et la fidélisation.
 
-### Description du Projet
-Nous développons un modèle de machine learning pour classifier les passagers comme satisfaits ou insatisfaits en fonction de leurs caractéristiques démographiques et de leur évaluation des services de vol. Le jeu de données comprend 129 880 lignes et 25 colonnes, incluant :
+## Enjeux
 
-**Caractéristiques démographiques** : 'Sexe', 'type de client', 'âge', 'type de voyage', 'classe'.
-**Évaluations des services** : 'Wi-Fi en vol', 'confort du siège', 'divertissement',..., notés de 1 à 5.
-**Retards de vol** : 'Retards au départ et à l’arrivée'.
-**Cible** : 'Satisfaction' (satisfait ou non).
+### 1. Identification des Facteurs de Satisfaction
+- **But** : Identifier les variables influençant la satisfaction, telles que la ponctualité, le confort et la qualité du service.
+- **Impact** : Prioriser les actions stratégiques pour optimiser l'expérience client.
 
-### Approche
-#### 1. Installation et Importation des Bibliothèques
-**Librairies utilisées** : pandas, numpy, seaborn, matplotlib pour la manipulation de données et visualisation.
-**Machine Learning**: scikit-learn.
-**Optimisation** : optuna pour le réglage des hyperparamètres.
-**Analyse exploratoire** : sweetviz pour un rapport général des données.
+### 2. Prédiction de la Mécontentement
+- **But** : Détecter les passagers susceptibles d'être insatisfaits.
+- **Impact** : Mettre en place des actions préventives afin de minimiser les avis négatifs et renforcer la fidélisation.
 
-#### 2. Chargement et Exploration des Données
-Identification des valeurs manquantes (393 lignes supprimées).
-Analyse des distributions et corrélations avec la satisfaction.
-Facteurs clés : Embarquement en ligne, confort du siège, divertissement en vol, type de voyage, classe.
-Un rapport (rapport_EDA.html) donne un aperçu global du jeu de données.
+### 3. Segmentation des Passagers selon leur Satisfaction
+- **But** : Regrouper les passagers en segments homogènes selon leurs attentes et niveaux de satisfaction.
+- **Impact** : Proposer des services personnalisés et optimiser l'expérience client par segment.
 
-#### 3. Modèle 1 : KNN Classifier 
-	
-**Pourquoi ce modèle ?** 
-Ce modèle est un algorithme de classification facile d'interprétation qui classe les données en fonction des k voisins les plus proches dans l'espace des caractéristiques. Dans notre  cas de la satisfaction des passagers, cela signifie que le modèle classe chaque passager en fonction des passagers qui lui ressemblent le plus, en se basant sur les évaluations et caractéristiques démographiques.
-		
-De plus, ce modèle est capable de prendre en compte correctement plusieurs dimensions de donnnées, cela nous permettra de capturer les relations entre différentes caractéristiques.
-	
-a. *Baseline** 
-	
-Pour notre Baseline, nous utilisons : 
-	- X composé que des caractéristiques numériques de notre dataset
-	- Y notre variable cible
-  - KNeighborsClassifier() : C'est un modèle de classification qui se base sur l'algorithme des k-plus proches voisins (KNN). Le principe de KNN est de prédire la classe d'un échantillon en fonction des classes des "k" voisins les plus proches. Ce modèle prend les caractéristiques (données) d'entraînement X_train et les étiquettes associées y_train pour apprendre à prédire les classes.
- - knn.fit(X_train, y_train) : Cette méthode entraîne le modèle en ajustant ses paramètres (par exemple, les distances entre les points et les voisins) en utilisant les données d'entraînement X_train et les labels y_train. Le modèle apprend à identifier la relation entre les caractéristiques (données) et les classes cibles pour pouvoir prédire les classes de nouveaux échantillons.
-	- Test_train_split pour séparer nos données de test et d'entrainement
- 
-b. *Normalisation de la donnée** 
+## Description du Projet
 
-**Pourquoi ?** 
-Le scaling des données est crucial avec l'utilisation de KNN, car il harmonise les échelles des caractéristiques. Sans scaling, les caractéristiques avec des valeurs plus grandes influencent davantage les calculs de distance, pouvant biaiser le modèle. Le scaling permet de donner une importance égale à chaque caractéristique, améliorant la performance et la fiabilité des modèles de machine learning qui s’appuient sur les distances pour prendre leurs décisions
+Le projet utilise un modèle de machine learning pour classer les passagers en tant que satisfaits ou non satisfaits. Le jeu de données comprend **129 880 lignes** et **25 colonnes**, incluant :
 
-StandardScaler() : soustrait la moyenne de chaque caractéristique (colonne) et divise par son écart-type. Cela donne des données avec une moyenne de 0 et une variance de 1. 
+- **Caractéristiques démographiques** : `Sexe`, `Type de client`, `Âge`, `Type de voyage`, `Classe`.
+- **Évaluations des services** : `Wi-Fi en vol`, `Confort du siège`, `Divertissement`, etc., notés de 1 à 5.
+- **Retards de vol** : `Retards au départ` et `à l’arrivée`.
+- **Cible** : `Satisfaction` (satisfait ou non).
 
-fit_transform(X_numeric) : Cette méthode calcule la moyenne et l'écart-type des données numériques présentes dans X_numeric (les caractéristiques du jeu de données), puis applique la transformation pour obtenir X_scaled, où chaque caractéristique est standardisée.
+## Approche Méthodologique
 
-train_test_split(X_scaled, y, test_size=0.2, random_state=42) : Cette fonction découpe le jeu de données en un ensemble d'entraînement (80%) et un ensemble de test (20%).
-X_scaled : Ce sont les caractéristiques des données normalisées.
+### 1. Installation et Importation des Bibliothèques
 
-test_size=0.2 : Cela signifie que 20% des données seront utilisées pour tester le modèle, et les 80% restants seront utilisés pour l'entraînement.
-random_state=42 : Ce paramètre garantit la reproductibilité des résultats. Si vous utilisez la même valeur pour random_state, vous obtiendrez toujours le même découpage du jeu de données.
+Les bibliothèques suivantes ont été utilisées :
+- **Manipulation de données** : `pandas`, `numpy`
+- **Visualisation** : `seaborn`, `matplotlib`
+- **Machine Learning** : `scikit-learn`
+- **Optimisation des hyperparamètres** : `optuna`
+- **Analyse exploratoire** : `sweetviz`
+
+### 2. Chargement et Exploration des Données
+
+- **Identification des valeurs manquantes** : 393 lignes avec des valeurs manquantes ont été supprimées.
+- **Analyse exploratoire** : Réalisation d'analyses des distributions, des corrélations et des relations avec la variable cible. Les variables clés identifiées incluent `Embarquement en ligne`, `Confort du siège`, `Divertissement en vol`, `Type de voyage` et `Classe`.
+
+> Un rapport détaillé de l'analyse exploratoire (`rapport_EDA.html`) a été généré pour un aperçu global.
+
+### 3. Préprocessing des Données
+
+Avant d'entraîner le modèle, un prétraitement des données a été réalisé pour assurer la qualité et la compatibilité des données avec les algorithmes de machine learning.
+
+- **Encodage de la variable cible (`y`)** :
+  La variable `satisfaction` a été encodée en utilisant `LabelEncoder`, attribuant 0 pour "insatisfait ou neutre" et 1 pour "satisfait".
+    ```python
+    from sklearn.preprocessing import LabelEncoder
+
+    label_encoder = LabelEncoder()
+    y = label_encoder.fit_transform(df_clean_satisfaction['satisfaction'])
+    ```
+
+- **Sélection des caractéristiques (`X`)** :
+  Initialement, `X` ne comprenait que les variables numériques présentes dans le jeu de données. Cela a permis de simplifier l'entraînement du modèle baseline avant d'intégrer des techniques avancées.
 
 
+### 4. Modélisation : K-Nearest Neighbors (KNN)
 
+#### a. Modèle Baseline
 
+- **Pourquoi KNN ?**
+Le KNN est un modèle de classification intuitif qui classe les observations en fonction de la similarité avec les k voisins les plus proches. Dans le contexte de la satisfaction des passagers, cela permet de prédire la satisfaction en s'appuyant sur les caractéristiques partagées entre les passagers similaires.
+
+- **Implémentation** :
+    ```python
+    from sklearn.neighbors import KNeighborsClassifier
+    from sklearn.model_selection import train_test_split
+
+    # Séparation des données
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    # Initialisation et entraînement du modèle
+    knn = KNeighborsClassifier()
+    knn.fit(X_train, y_train)
+    ```
+
+#### b. Normalisation des Données
+
+- **Pourquoi normaliser ?**
+Le scaling est essentiel pour garantir que toutes les caractéristiques contribuent de manière égale aux calculs de distance, évitant ainsi les biais introduits par des échelles différentes.
+
+- **Méthode** : `StandardScaler()` standardise les données en soustrayant la moyenne et en divisant par l'écart-type.
+    ```python
+    from sklearn.preprocessing import StandardScaler
+
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(X_numeric)
+    ```
+
+- **Découpage des données** :
+    ```python
+    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42)
+    ```
+
+## Résultats et Conclusion
+
+- **Impact de la normalisation** : La normalisation des données a eu un effet significatif sur la performance du modèle. En effet, le scaling nous a permis de passer d'une accuracy de 60 % avec la baseline à une accuracy de 90 %, améliorant ainsi considérablement la fiabilité des prédictions.
+- **Améliorations** : Utilisation de techniques avancées d'optimisation des hyperparamètres, telles que `optuna`, pour ajuster les valeurs de k et améliorer la performance du modèle.
 
 
